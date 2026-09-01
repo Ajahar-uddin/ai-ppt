@@ -11,3 +11,9 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+.agents
+.claude
+.windsurf
+
+/src/generated/prisma
