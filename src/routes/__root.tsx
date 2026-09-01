@@ -4,10 +4,10 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 
-
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { TooltipProvider } from '#/components/ui/tooltip'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -44,7 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Scripts />
       </body>
     </html>

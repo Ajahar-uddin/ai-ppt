@@ -1,14 +1,18 @@
+import { Button } from '#/components/ui/button'
+import { Card, CardTitle } from '#/components/ui/card'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
+    <div>
+      <Card>
+        <CardTitle className="text-2xl">Welcome to TanStack Start</CardTitle>
+        <Button variant="default" className="w-full">
+          Get Started
+        </Button>
+      </Card>
     </div>
   )
 }
