@@ -1,5 +1,6 @@
 import {
   HeadContent,
+  Outlet,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
@@ -8,7 +9,9 @@ import type { QueryClient } from '@tanstack/react-query'
 import appCss from '../styles.css?url'
 
 import { TooltipProvider } from '#/components/ui/tooltip'
-import { ToastProvider } from '#/components/ui/toast'
+import { Toaster } from '#/components/ui/toast'
+import { ThemeProvider } from '#/providers/theme-provider'
+import Navbar from '#/components/Navbar'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -38,15 +41,20 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument() {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider>{children}</TooltipProvider>
-        <ToastProvider />
+        <ThemeProvider defaultTheme="system" storageKey="theme">
+          <TooltipProvider>
+            <Navbar />
+            <Outlet />
+          </TooltipProvider>
+          <Toaster />
+        </ThemeProvider>
         <Scripts />
       </body>
     </html>

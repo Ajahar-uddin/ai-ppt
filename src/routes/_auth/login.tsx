@@ -1,9 +1,18 @@
 import LoginForm from '#/components/auth/login-form'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { getSession } from '#/lib/auth.functions'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { PresentationIcon } from 'lucide-react'
 import { z } from 'zod'
 
 export const Route = createFileRoute('/_auth/login')({
+  beforeLoad: async () => {
+    const session = await getSession()
+    if (session) {
+      throw redirect({
+        to: '/',
+      })
+    }
+  },
   validateSearch: z.object({
     redirect: z.string().optional(),
   }),
@@ -15,7 +24,7 @@ function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="glass rounded-3xl p-8 space-y-6">
+        <div className="glass rounded-xl p-8 space-y-6">
           {/* Logo */}
           <div className="flex flex-col items-center gap-3">
             <Link to="/" className="no-underline">

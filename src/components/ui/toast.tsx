@@ -203,7 +203,7 @@ function Toaster({
   ...props
 }: ToastPrimitive.Provider.Props) {
   return (
-    <ToastProvider toastManager={toastManager} {...props}>
+    <ToastProvider toastManager={toastManager} {...props} >
       {children}
       <ToastPortal>
         <ToastViewport>
