@@ -1,6 +1,6 @@
 export const AUTH_LOGIN_PATH = '/login'
 export const AUTH_API_PREFIX = '/api/auth'
-export const INGEST_API_PATH = '/api/ingest'
+export const INGEST_API_PATH = '/api/inngest'
 
 const PUBLIC_PREFIXES = [
     AUTH_LOGIN_PATH,
