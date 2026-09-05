@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
-    "check": "prettier --check ."
+    "check": "prettier --check .",
+    "postinstall": "prisma generate --config prisma7.config.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.63",
