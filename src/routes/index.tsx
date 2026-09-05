@@ -11,15 +11,19 @@ import {
 import { Slider } from '#/components/ui/slider'
 import { Textarea } from '#/components/ui/textarea'
 
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   LAYOUT_OPTIONS,
   SLIDE_STYLES,
   TONE_OPTIONS,
 } from '#/features/presentation/constants/presentation-options'
-import { Wand2Icon } from 'lucide-react'
+import { SparklesIcon, Wand2Icon } from 'lucide-react'
 import { PRESENTATION_TEMPLATES } from '#/features/presentation/constants/presentation-templates'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createPresentaion } from '#/features/presentation/actions/presentation-mutation'
+import { toast } from '#/components/ui/toast'
+import { presentationQueryKeys } from '#/features/presentation/hooks/query-keys'
 
 type HomeFormState = {
   content: string
@@ -45,6 +49,8 @@ export const Route = createFileRoute('/')({
 })
 
 function Home() {
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const [form, setForm] = useState<HomeFormState>({
     content: '',
     slideCount: 3,
@@ -53,9 +59,47 @@ function Home() {
     layout: 'text-heavy',
   })
 
+  const createMut = useMutation({
+    mutationFn: () =>
+      createPresentaion({
+        data: {
+          prompt: form.content,
+          slideCount: form.slideCount,
+          style: form.style,
+          tone: form.tone,
+          layout: form.layout,
+        },
+      }),
+    onSuccess: (data) => {
+      toast.add({
+        type: 'success',
+        title: 'Presentation created successfully',
+      })
+      queryClient.invalidateQueries({
+        queryKey: presentationQueryKeys.list(),
+      })
+      navigate({
+        to: '/presentation/$presentationId',
+        params: { presentationId: data.id },
+      })
+    },
+    onError: (error) => {
+      toast.add({
+        type: 'error',
+        title: 'Failed to create presentation',
+        description: error.message,
+      })
+    },
+  })
+
   const handleGenerate = async () => {
-    try {
-    } catch (error) {}
+    if (!form.content.trim()) {
+      toast.add({
+        type: 'warning',
+        title: 'Please enter a prompt',
+      })
+    }
+    createMut.mutate()
   }
 
   return (
@@ -196,20 +240,20 @@ function Home() {
             <Button
               size="lg"
               onClick={handleGenerate}
-              // disabled={createMut.isPending || !form.content.trim()}
+              disabled={createMut.isPending || !form.content.trim()}
               className="rounded-xl px-8 gap-2 font-semibold"
             >
-              {/* {createMut.isPending ? (
+              {createMut.isPending ? (
                 <>
                   <SparklesIcon className="size-5 animate-pulse" />
                   Creating…
                 </>
               ) : (
                 <>
+                  <Wand2Icon className="size-5" />
+                  Generate PPT
                 </>
-              )} */}
-              <Wand2Icon className="size-5" />
-              Generate PPT
+              )}
             </Button>
           </div>
         </div>

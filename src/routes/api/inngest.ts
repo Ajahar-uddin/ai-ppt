@@ -1,5 +1,5 @@
 import { inngest } from "#/integrations/inngest/client";
-import { helloWorld } from "#/integrations/inngest/function";
+import { generatePresentation } from "#/integrations/inngest/presentation/function";
 import { createFileRoute } from "@tanstack/react-router";
 import { serve } from "inngest/edge";
 
@@ -7,7 +7,7 @@ const handler = serve({
   client: inngest,
   functions: [
     /* your functions will be passed here later! */
-    helloWorld,
+    generatePresentation,
   ],
 });
 

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as ApiInngestRouteImport } from './routes/api/inngest'
+import { Route as PresentationPresentationPresentationIdRouteImport } from './routes/_presentation/presentation.$presentationId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -34,6 +35,12 @@ const ApiInngestRoute = ApiInngestRouteImport.update({
   path: '/api/inngest',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PresentationPresentationPresentationIdRoute =
+  PresentationPresentationPresentationIdRouteImport.update({
+    id: '/_presentation/presentation/$presentationId',
+    path: '/presentation/$presentationId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -44,12 +51,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
   '/api/inngest': typeof ApiInngestRoute
+  '/presentation/$presentationId': typeof PresentationPresentationPresentationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
   '/api/inngest': typeof ApiInngestRoute
+  '/presentation/$presentationId': typeof PresentationPresentationPresentationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -58,19 +67,31 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/api/inngest': typeof ApiInngestRoute
+  '/_presentation/presentation/$presentationId': typeof PresentationPresentationPresentationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/api/inngest' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/api/inngest'
+    | '/presentation/$presentationId'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/api/inngest' | '/api/auth/$'
+  to:
+    | '/'
+    | '/login'
+    | '/api/inngest'
+    | '/presentation/$presentationId'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_auth/login'
     | '/api/inngest'
+    | '/_presentation/presentation/$presentationId'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -78,6 +99,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiInngestRoute: typeof ApiInngestRoute
+  PresentationPresentationPresentationIdRoute: typeof PresentationPresentationPresentationIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -111,6 +133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiInngestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_presentation/presentation/$presentationId': {
+      id: '/_presentation/presentation/$presentationId'
+      path: '/presentation/$presentationId'
+      fullPath: '/presentation/$presentationId'
+      preLoaderRoute: typeof PresentationPresentationPresentationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -137,6 +166,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiInngestRoute: ApiInngestRoute,
+  PresentationPresentationPresentationIdRoute:
+    PresentationPresentationPresentationIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

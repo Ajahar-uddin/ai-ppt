@@ -22,18 +22,15 @@ export class PresentationController {
         }
     }
 
-    async updatePresentationByUserId(data: {
-        id: string
-        userId: string
-        data: any
-    }) {
+    async updatePresentationById(id: string, data: any) {
         try {
             const response = await this.prisma.presentation.update({
                 where: {
-                    id: data.id,
-                    userId: data.userId
+                    id,
                 },
-                data: data.data
+                data: {
+                    ...data
+                }
             })
             return response;
         } catch (error) {
@@ -45,7 +42,7 @@ export class PresentationController {
         try {
             const response = await this.prisma.presentation.findUnique({
                 where: {
-                    id
+                    id,
                 }
             })
             return response;
@@ -54,12 +51,11 @@ export class PresentationController {
         }
     }
 
-    async deletePresentationById(id: string, userId: string) {
+    async deletePresentationById(id: string) {
         try {
             const response = await this.prisma.presentation.delete({
                 where: {
                     id,
-                    userId
                 }
             })
             return response;
@@ -68,15 +64,34 @@ export class PresentationController {
         }
     }
 
-    async regeneratePresentationById(id: string, userId: string) {
+    async regeneratePresentationById(id: string) {
         try {
             const response = await this.prisma.presentation.update({
                 where: {
-                    id,
-                    userId
+                    id
                 },
                 data: {
                     status: PresentationStatus.GENERATING
+                }
+            })
+            return response;
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getPresentationWithSlides(id: string, userId: string) {
+        try {
+            const response = await this.prisma.presentation.findUnique({
+                where: {
+                    id,
+                    userId
+                }, include: {
+                    slides: {
+                        orderBy: {
+                            order: "asc"
+                        }
+                    }
                 }
             })
             return response;
