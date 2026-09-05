@@ -1,11 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { presentationQueryKeys } from "./query-keys"
-import { getPresentationWithSlides } from "../actions/presentation-query"
+import { getPresentationList, getPresentationWithSlides } from "../actions/presentation-query"
 import { PresentationStatus } from "#/generated/prisma/enums"
 import { useEffect, useState } from "react"
 import { deletePresentation, regeneratePresentation, updatePresentation } from "../actions/presentation-mutation"
 import type { SlideLayout, SlideStyle, SlideTone } from "../constants/presentation-options"
 import { toast } from "#/components/ui/toast"
+import { useNavigate } from "@tanstack/react-router"
 
 
 type SettingsForm = {
@@ -24,7 +25,7 @@ export function usePresentationHook(
         onDelete?: () => void
     }
 ) {
-
+    const navigate = useNavigate()
     const queryClient = useQueryClient()
 
     const query = useQuery({
@@ -103,6 +104,9 @@ export function usePresentationHook(
             queryClient.removeQueries({
                 queryKey: presentationQueryKeys.detail(presentationId),
             })
+            navigate({
+                to: '/',
+            })
         },
         onError: (error) => {
             toast.add({
@@ -151,4 +155,17 @@ export function usePresentationHook(
         deleteMut,
     }
 
+}
+
+export function usePresentationListHook() {
+
+    const { data, isPending } = useQuery({
+        queryKey: presentationQueryKeys.list(),
+        queryFn: () => getPresentationList(),
+    })
+
+    return {
+        data,
+        isPending
+    }
 }

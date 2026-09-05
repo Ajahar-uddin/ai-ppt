@@ -99,4 +99,20 @@ export class PresentationController {
             throw error
         }
     }
+
+    async getPresentationsList(userId: string) {
+        try {
+            const response = await this.prisma.presentation.findMany({
+                where: {
+                    userId
+                },
+                orderBy: {
+                    updatedAt: 'desc'
+                }
+            })
+            return response;
+        } catch (error) {
+            throw error
+        }
+    }
 }

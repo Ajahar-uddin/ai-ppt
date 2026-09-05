@@ -24,6 +24,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createPresentaion } from '#/features/presentation/actions/presentation-mutation'
 import { toast } from '#/components/ui/toast'
 import { presentationQueryKeys } from '#/features/presentation/hooks/query-keys'
+import {
+  usePresentationHook,
+  usePresentationListHook,
+} from '#/features/presentation/hooks/usePresentationHook'
+import { PresentationListSection } from '#/features/presentation/components/presentaion-list-section'
 
 type HomeFormState = {
   content: string
@@ -59,6 +64,10 @@ function Home() {
     layout: 'text-heavy',
   })
 
+  const { data: presentationList, isPending: isPresentationListPending } =
+    usePresentationListHook()
+
+  console.log(presentationList, isPresentationListPending)
   const createMut = useMutation({
     mutationFn: () =>
       createPresentaion({
@@ -106,6 +115,10 @@ function Home() {
     <main className="min-h-screen pt-24 pb-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Todo : Presentation cards */}
+        <PresentationListSection
+          presentations={presentationList!}
+          isPending={isPresentationListPending}
+        />
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-3">

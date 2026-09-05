@@ -1,12 +1,8 @@
-import { getSession } from '@/lib/auth.functions'
 import {
   LAYOUT_OPTIONS,
   SLIDE_STYLES,
   TONE_OPTIONS,
 } from '#/features/presentation/constants/presentation-options'
-// import { GenerationStatus } from '#/features/presentations/components/generation-status'
-// import { SlideCard } from '#/features/presentations/components/slide-card'
-// import { SlidePreview } from '#/features/presentations/components/slide-preview'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,12 +25,14 @@ import {
 } from '#/components/ui/select'
 import { Slider } from '#/components/ui/slider'
 import { Textarea } from '#/components/ui/textarea'
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useNavigate,
-} from '@tanstack/react-router'
+import { GenerationStatus } from '#/features/presentation/components/generattion-status'
+import { SlideCard } from '#/features/presentation/components/slide-card'
+import { SlidePreview } from '#/features/presentation/components/slide-preview'
+import { SlideshowModal } from '#/features/presentation/components/slideshow-modal'
+import { useFullscreen } from '#/features/presentation/hooks/use-fullscreen'
+import { usePresentationHook } from '#/features/presentation/hooks/usePresentationHook'
+import { presentationThumbnailUrl } from '#/features/presentation/utils/thumbnail-url'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft,
   ChevronLeft,
@@ -46,10 +44,7 @@ import {
   Save,
   Trash2,
 } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { usePresentationHook } from '#/features/presentation/hooks/usePresentationHook'
-import { presentationThumbnailUrl } from '#/features/presentation/utils/thumbnail-url'
-import { GenerationStatus } from '#/features/presentation/components/generattion-status'
+import { useState } from 'react'
 
 export const Route = createFileRoute(
   '/_presentation/presentation/$presentationId',
@@ -64,6 +59,10 @@ function RouteComponent() {
   const [showSettings, setShowSettings] = useState(false)
   const [showSlideshow, setShowSlideshow] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
+
+  const { isFullscreen, toggleFullscreen } = useFullscreen(
+    'slide-preview-container',
+  )
 
   const {
     query,
@@ -381,57 +380,57 @@ function RouteComponent() {
               </div>
             )}
 
-            {/* {activeSlide && (
-                <div className="space-y-3">
-                  <div id="slide-preview-container" className="relative group">
-                    <SlidePreview
-                      slide={activeSlide}
-                      isFullscreen={isFullscreen}
-                    />
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className={`absolute top-3 right-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity ${
-                        isFullscreen ? 'opacity-100' : ''
-                      }`}
-                      onClick={toggleFullscreen}
-                    >
-                      <Maximize className="size-4" />
-                    </Button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-1"
-                      disabled={activeSlideIndex === 0}
-                      onClick={() =>
-                        setActiveSlideIndex((i) => Math.max(0, i - 1))
-                      }
-                    >
-                      <ChevronLeft className="size-4" />
-                      Previous
-                    </Button>
-                    <span className="text-sm text-muted-foreground">
-                      {activeSlideIndex + 1} / {slides.length}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl gap-1"
-                      disabled={activeSlideIndex >= slides.length - 1}
-                      onClick={() =>
-                        setActiveSlideIndex((i) =>
-                          Math.min(slides.length - 1, i + 1),
-                        )
-                      }
-                    >
-                      Next
-                      <ChevronRight className="size-4" />
-                    </Button>
-                  </div>
+            {activeSlide && (
+              <div className="space-y-3">
+                <div id="slide-preview-container" className="relative group">
+                  <SlidePreview
+                    slide={activeSlide}
+                    isFullscreen={isFullscreen}
+                  />
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className={`absolute top-3 right-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity ${
+                      isFullscreen ? 'opacity-100' : ''
+                    }`}
+                    onClick={toggleFullscreen}
+                  >
+                    <Maximize className="size-4" />
+                  </Button>
                 </div>
-              )} */}
+                <div className="flex items-center justify-between">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl gap-1"
+                    disabled={activeSlideIndex === 0}
+                    onClick={() =>
+                      setActiveSlideIndex((i) => Math.max(0, i - 1))
+                    }
+                  >
+                    <ChevronLeft className="size-4" />
+                    Previous
+                  </Button>
+                  <span className="text-sm text-muted-foreground">
+                    {activeSlideIndex + 1} / {slides.length}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl gap-1"
+                    disabled={activeSlideIndex >= slides.length - 1}
+                    onClick={() =>
+                      setActiveSlideIndex((i) =>
+                        Math.min(slides.length - 1, i + 1),
+                      )
+                    }
+                  >
+                    Next
+                    <ChevronRight className="size-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {slides.length === 0 && !isGenerating && (
               <div className="glass rounded-2xl p-12 text-center">
@@ -463,32 +462,32 @@ function RouteComponent() {
             )}
           </div>
 
-          {/* {slides.length > 0 && (
-              <aside className="lg:w-80 xl:w-96 flex flex-col">
-                <h2 className="font-medium text-sm px-2 pb-3 text-muted-foreground">
-                  Slides
-                </h2>
-                <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent pr-2 -mr-2 space-y-4 max-h-[calc(100vh-14rem)]">
-                  {slides.map((slide, i) => (
-                    <SlideCard
-                      key={slide.id}
-                      slide={slide}
-                      isActive={i === activeSlideIndex}
-                      onClick={() => setActiveSlideIndex(i)}
-                    />
-                  ))}
-                </div>
-              </aside>
-            )} */}
+          {slides.length > 0 && (
+            <aside className="lg:w-80 xl:w-96 flex flex-col">
+              <h2 className="font-medium text-sm px-2 pb-3 text-muted-foreground">
+                Slides
+              </h2>
+              <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent pr-2 -mr-2 space-y-4 max-h-[calc(100vh-14rem)]">
+                {slides.map((slide, i) => (
+                  <SlideCard
+                    key={slide.id}
+                    slide={slide}
+                    isActive={i === activeSlideIndex}
+                    onClick={() => setActiveSlideIndex(i)}
+                  />
+                ))}
+              </div>
+            </aside>
+          )}
         </div>
       </div>
-      {/* {showSlideshow && (
+      {showSlideshow && (
         <SlideshowModal
           slides={slides}
           initialIndex={activeSlideIndex}
           onClose={() => setShowSlideshow(false)}
         />
-      )} */}
+      )}
     </main>
   )
 }

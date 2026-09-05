@@ -18,3 +18,14 @@ export const getPresentationWithSlides = createServerFn({ method: "GET" })
 
         return existing
     })
+
+export const getPresentationList = createServerFn({ method: "GET" })
+    .middleware([authFnMiddleware])
+    .handler(async ({ context }) => {
+        const { user } = context?.session
+        const userId = user.id
+
+        const existing = await presentationControllerHandler.getPresentationsList(userId)
+
+        return existing
+    })
