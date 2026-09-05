@@ -105,26 +105,29 @@ export default function Navbar() {
               <div className="size-9 rounded-full bg-muted animate-pulse" />
             ) : session?.user ? (
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button
-                    variant="ghost"
-                    className="relative size-9 rounded-full p-0"
-                  >
-                    <Avatar className="size-9 border-2 border-primary/30">
-                      <AvatarImage
-                        src={session.user.image || ''}
-                        alt={session.user.name}
-                      />
-                      <AvatarFallback className="bg-primary/10 text-primary font-medium">
-                        {session.user.name ? (
-                          session.user.name.charAt(0).toUpperCase()
-                        ) : (
-                          <User className="size-4" />
-                        )}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="relative size-9 rounded-full p-0"
+                      nativeButton={true}
+                    >
+                      <Avatar className="size-9 border-2 border-primary/30">
+                        <AvatarImage
+                          src={session.user.image || ''}
+                          alt={session.user.name}
+                        />
+                        <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                          {session.user.name ? (
+                            session.user.name.charAt(0).toUpperCase()
+                          ) : (
+                            <User className="size-4" />
+                          )}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  }
+                />
                 <DropdownMenuGroup>
                   <DropdownMenuContent
                     align="end"

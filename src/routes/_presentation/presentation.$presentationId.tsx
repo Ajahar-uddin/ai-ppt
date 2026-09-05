@@ -30,7 +30,7 @@ import { SlideCard } from '#/features/presentation/components/slide-card'
 import { SlidePreview } from '#/features/presentation/components/slide-preview'
 import { SlideshowModal } from '#/features/presentation/components/slideshow-modal'
 import { useFullscreen } from '#/features/presentation/hooks/use-fullscreen'
-import { usePresentationHook } from '#/features/presentation/hooks/usePresentationHook'
+import { usePresentationHook } from '#/features/presentation/hooks/use-presentation-hook'
 import { presentationThumbnailUrl } from '#/features/presentation/utils/thumbnail-url'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import {
@@ -119,9 +119,9 @@ function RouteComponent() {
           <div className="flex items-center gap-3">
             <Button
               render={
-                <Link to="/">
+                <Link to="/presentations">
                   <ArrowLeft className="size-4" />
-                  Home
+                  Presentations
                 </Link>
               }
               variant="ghost"
@@ -333,6 +333,7 @@ function RouteComponent() {
                           size="sm"
                           className="rounded-xl gap-2"
                           disabled={deleteMut.isPending}
+                          nativeButton={false}
                         >
                           <Trash2 className="size-4" />
                           Delete

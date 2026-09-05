@@ -1,13 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { presentationQueryKeys } from "./query-keys"
-import { getPresentationList, getPresentationWithSlides } from "../actions/presentation-query"
+import { toast } from "#/components/ui/toast"
 import { PresentationStatus } from "#/generated/prisma/enums"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { deletePresentation, regeneratePresentation, updatePresentation } from "../actions/presentation-mutation"
+import { getPresentationList, getPresentationWithSlides } from "../actions/presentation-query"
 import type { SlideLayout, SlideStyle, SlideTone } from "../constants/presentation-options"
-import { toast } from "#/components/ui/toast"
-import { useNavigate } from "@tanstack/react-router"
-
+import { presentationQueryKeys } from "./query-keys"
 
 type SettingsForm = {
     title: string
@@ -17,7 +16,6 @@ type SettingsForm = {
     tone: SlideTone
     layout: SlideLayout
 }
-
 
 export function usePresentationHook(
     presentationId: string,
@@ -105,7 +103,7 @@ export function usePresentationHook(
                 queryKey: presentationQueryKeys.detail(presentationId),
             })
             navigate({
-                to: '/',
+                to: '/presentations',
             })
         },
         onError: (error) => {
@@ -158,7 +156,6 @@ export function usePresentationHook(
 }
 
 export function usePresentationListHook() {
-
     const { data, isPending } = useQuery({
         queryKey: presentationQueryKeys.list(),
         queryFn: () => getPresentationList(),

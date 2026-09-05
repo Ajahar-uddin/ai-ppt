@@ -11,23 +11,25 @@ import {
 import { Slider } from '#/components/ui/slider'
 import { Textarea } from '#/components/ui/textarea'
 
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   LAYOUT_OPTIONS,
   SLIDE_STYLES,
   TONE_OPTIONS,
 } from '#/features/presentation/constants/presentation-options'
-import { SparklesIcon, Wand2Icon } from 'lucide-react'
+import { ArrowRightIcon, SparklesIcon, Wand2Icon } from 'lucide-react'
 import { PRESENTATION_TEMPLATES } from '#/features/presentation/constants/presentation-templates'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createPresentaion } from '#/features/presentation/actions/presentation-mutation'
 import { toast } from '#/components/ui/toast'
 import { presentationQueryKeys } from '#/features/presentation/hooks/query-keys'
-import {
-  usePresentationHook,
-  usePresentationListHook,
-} from '#/features/presentation/hooks/usePresentationHook'
+import { usePresentationListHook } from '#/features/presentation/hooks/use-presentation-hook'
 import { PresentationListSection } from '#/features/presentation/components/presentaion-list-section'
 
 type HomeFormState = {
@@ -67,7 +69,6 @@ function Home() {
   const { data: presentationList, isPending: isPresentationListPending } =
     usePresentationListHook()
 
-  console.log(presentationList, isPresentationListPending)
   const createMut = useMutation({
     mutationFn: () =>
       createPresentaion({
@@ -111,14 +112,30 @@ function Home() {
     createMut.mutate()
   }
 
+  const presnetationList = presentationList?.slice(0, 2)
+
   return (
     <main className="min-h-screen pt-24 pb-12 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Todo : Presentation cards */}
+        {/* Presentation cards */}
         <PresentationListSection
-          presentations={presentationList!}
+          presentations={presnetationList!}
           isPending={isPresentationListPending}
         />
+        <div className="text-center mb-10 mt-12">
+          <Button
+            render={
+              <Link to="/presentations">
+                View All
+                <ArrowRightIcon className="size-4" />
+              </Link>
+            }
+            variant="ghost"
+            size="sm"
+            className="rounded-xl gap-1"
+            nativeButton={false}
+          />
+        </div>
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-3">

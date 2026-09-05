@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as PresentationPresentationsRouteImport } from './routes/_presentation/presentations'
 import { Route as ApiInngestRouteImport } from './routes/api/inngest'
 import { Route as PresentationPresentationPresentationIdRouteImport } from './routes/_presentation/presentation.$presentationId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -30,6 +31,12 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const PresentationPresentationsRoute =
+  PresentationPresentationsRouteImport.update({
+    id: '/_presentation/presentations',
+    path: '/presentations',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiInngestRoute = ApiInngestRouteImport.update({
   id: '/api/inngest',
   path: '/api/inngest',
@@ -50,6 +57,7 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
+  '/presentations': typeof PresentationPresentationsRoute
   '/api/inngest': typeof ApiInngestRoute
   '/presentation/$presentationId': typeof PresentationPresentationPresentationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -57,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
+  '/presentations': typeof PresentationPresentationsRoute
   '/api/inngest': typeof ApiInngestRoute
   '/presentation/$presentationId': typeof PresentationPresentationPresentationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -66,6 +75,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
+  '/_presentation/presentations': typeof PresentationPresentationsRoute
   '/api/inngest': typeof ApiInngestRoute
   '/_presentation/presentation/$presentationId': typeof PresentationPresentationPresentationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -75,6 +85,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/presentations'
     | '/api/inngest'
     | '/presentation/$presentationId'
     | '/api/auth/$'
@@ -82,6 +93,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/presentations'
     | '/api/inngest'
     | '/presentation/$presentationId'
     | '/api/auth/$'
@@ -90,6 +102,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/_auth/login'
+    | '/_presentation/presentations'
     | '/api/inngest'
     | '/_presentation/presentation/$presentationId'
     | '/api/auth/$'
@@ -98,6 +111,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  PresentationPresentationsRoute: typeof PresentationPresentationsRoute
   ApiInngestRoute: typeof ApiInngestRoute
   PresentationPresentationPresentationIdRoute: typeof PresentationPresentationPresentationIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -125,6 +139,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_presentation/presentations': {
+      id: '/_presentation/presentations'
+      path: '/presentations'
+      fullPath: '/presentations'
+      preLoaderRoute: typeof PresentationPresentationsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/inngest': {
       id: '/api/inngest'
@@ -165,6 +186,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  PresentationPresentationsRoute: PresentationPresentationsRoute,
   ApiInngestRoute: ApiInngestRoute,
   PresentationPresentationPresentationIdRoute:
     PresentationPresentationPresentationIdRoute,
