@@ -17,3 +17,6 @@ todos.json
 .windsurf
 
 /src/generated/prisma
+
+.vercel
+.env*
